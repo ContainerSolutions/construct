@@ -1,0 +1,18 @@
+# Requirements for Mesos Demo
+
+cov-core==1.15.0
+coverage==3.7.1
+doctools==0.2.2
+futures==2.2.0
+google-apputils==0.4.2
+kazoo==2.2.1
+protobuf==2.6.1
+py==1.4.26
+pytest==2.7.0
+pytest-cov==1.8.1
+python-dateutil==2.4.2
+python-gflags==2.0
+pytz==2015.2
+requests==2.6.2
+sh==1.11
+six==1.9.0

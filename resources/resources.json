@@ -1,0 +1,61 @@
+{
+    "offers": [
+        {
+            "url": {
+                "path": "/slave(1)",
+                "scheme": "http",
+                "address": {
+                    "ip": "192.168.1.51",
+                    "hostname": "gondor",
+                    "port": 5055
+                }
+            },
+            "hostname": "gondor",
+            "framework_id": {
+                "value": "20150820-224310-855746752-5051-17686-0005"
+            },
+            "agent_id": {
+                "value": "20150820-125856-855746752-5051-6674-S0"
+            },
+            "id": {
+                "value": "20150820-224310-855746752-5051-17686-O4"
+            },
+            "resources": [
+                {
+                    "type": "SCALAR",
+                    "scalar": {
+                        "value": 12
+                    },
+                    "role": "*",
+                    "name": "cpus"
+                },
+                {
+                    "type": "SCALAR",
+                    "scalar": {
+                        "value": 31094
+                    },
+                    "role": "*",
+                    "name": "mem"
+                },
+                {
+                    "type": "SCALAR",
+                    "scalar": {
+                        "value": 431720
+                    },
+                    "role": "*",
+                    "name": "disk"
+                },
+                {
+                    "ranges": {
+                        "range": [
+                            {"begin": 31000, "end": 32000}
+                        ]
+                    },
+                    "type": "RANGES",
+                    "role": "*",
+                    "name": "ports"
+                }
+            ]
+        }
+    ]
+}

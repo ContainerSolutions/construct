@@ -1,0 +1,50 @@
+{
+  "framework_id": {
+    "value": null
+  },
+  "type": "ACCEPT",
+  "accept": {
+    "offer_ids": [
+    ],
+    "operations": [
+      {
+        "type": "LAUNCH",
+        "launch": {
+          "task_infos": [
+            {
+              "name": "PingContainer",
+              "agent_id": {
+                "value": null
+              },
+              "task_id": {
+                "value": null
+              },
+              "command": {
+                "uris": [
+                  {
+                    "value": "http://192.168.33.1:9000/content.tar.gz",
+                    "extract": true
+                  }
+                ],
+                "shell": true,
+                "value": "cd /var/local/sandbox && python -m SimpleHTTPServer 9090"
+              },
+              "container": {
+                "docker": {
+                  "image": "python:2.7",
+                  "network": "HOST",
+                  "privileged": false
+                },
+                "type": "DOCKER"
+              },
+              "resources": [ ]
+            }
+          ]
+        }
+      }
+    ],
+    "filters": {
+      "refuse_seconds": 5
+    }
+  }
+}

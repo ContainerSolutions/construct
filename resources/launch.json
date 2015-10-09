@@ -1,0 +1,29 @@
+{
+    "framework_id": {
+        "value": null
+    },
+    "type": "ACCEPT",
+    "accept": {
+        "offer_ids": [
+        ],
+        "operations": [
+            {
+                "type": "LAUNCH",
+                "launch": {
+                    "task_infos": [
+                        {
+                            "task_id": {"value": null},
+                            "agent_id": {"value": null},
+                            "name": "Launch Simple HTTP Server",
+                            "command": {
+                                "shell": true,
+                                "value": null
+                            },
+                            "resources": null
+                        }
+                    ]
+                }
+            }
+        ]
+    }
+}

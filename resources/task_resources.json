@@ -1,0 +1,14 @@
+[
+    {
+        "name": "cpus",
+        "role": "*",
+        "scalar": {"value": 0.2},
+        "type": "SCALAR"
+    },
+    {
+        "name": "mem",
+        "role": "*",
+        "scalar": {"value": 100},
+        "type": "SCALAR"
+    }
+]
