@@ -52,9 +52,10 @@ class Launcher:
                 pretty.pprint(self.conn.offers)
 
     def launch(self):
-        for i in range(0, len(self.conn.offers)):
-            print("Starting offer ", i)
-            offer = self.conn.offers.get('offers')[i]
+        my_offers = self.conn.offers.get('offers')
+        for i in range(0, len(my_offers)):
+            print("Starting offer ", i + 1, " of ", len(my_offers))
+            offer = my_offers[i]
             launch_json = get_json(LAUNCH_JSON)
 
             task_id = str(random.randint(100, 1000))
@@ -65,8 +66,8 @@ class Launcher:
             task_infos = launch_json["accept"]["operations"][0]["launch"]["task_infos"][0]
 
             task_infos["task_id"]["value"] = task_id
-            task_infos["command"]["value"] = "cd /var/local/www && /usr/bin/python -m SimpleHTTPServer 9000"
-            task_infos["agent_id"]["value"] = self.conn.offers.get('offers')[0]["agent_id"]["value"]
+            task_infos["command"]["value"] = "/usr/bin/python -m SimpleHTTPServer 9000"
+            task_infos["agent_id"]["value"] = offer["agent_id"]["value"]
             task_infos["resources"] = get_json(TASK_RESOURCES_JSON)
 
 
@@ -82,7 +83,7 @@ class Launcher:
 
 
 def main():
-    launcher = Launcher("http://172.17.0.28:5050")
+    launcher = Launcher("http://172.17.0.31:5050")
     launcher.connect()
     launcher.wait_for_offers()
     launcher.launch()

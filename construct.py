@@ -13,7 +13,7 @@ SUBSCRIBE_BODY = {
     "type": "SUBSCRIBE",
     "subscribe": {
         "framework_info": {
-            "user" :  "vagrant",
+            "user" :  "root", # If you are using vagrant, you will need to change this user to: "vagrant"
             "name" :  "Example HTTP Framework"
         },
         "force" : True
