@@ -88,6 +88,9 @@ class ApiConnector:
         self.framework_id = None
         self.last_heartbeat = None
 
+    def get_offers(self):
+        return self.offers
+
     def handle_heartbeat(self, body):
         print("[HEARTBEAT] {}".format(body))
         self.last_heartbeat = time.ctime()
@@ -206,7 +209,7 @@ class ApiConnectorThread(Thread):
         print("Subscribe post request returned: {}".format(ret))
 
         
-    def cancel():
+    def cancel(self):
         print("Stopping connector thread")
         self.connector.terminate = True
         self.framework_id = None
