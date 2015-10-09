@@ -81,9 +81,39 @@ class Launcher:
             except ValueError, err:
                 print("Request failed: {}".format(err))
 
+    def launch_docker(self):
+        my_offers = self.conn.offers.get('offers')
+        for i in range(0, len(my_offers)):
+            print("Starting offer ", i + 1, " of ", len(my_offers))
+            offer = my_offers[i]
+            container_launch_info = get_json(DOCKER_JSON)
+
+            # Need to update the fields that reflect the offer ID / agent ID and a random, unique task ID:
+            task_id = str(random.randint(1, 100))
+            agent_id = offer['agent_id']['value']
+            offer_id = offer['id']
+
+            container_launch_info["accept"]["offer_ids"].append(offer["id"])
+            container_launch_info["framework_id"]["value"] = self.conn.framework_id
+
+            task_infos = container_launch_info["accept"]["operations"][0]["launch"]["task_infos"][0]
+            task_infos["agent_id"]["value"] = agent_id
+            task_infos["task_id"]["value"] = task_id
+            task_infos["resources"].append(get_json(TASK_RESOURCES_JSON))
+
+            print("Sending ACCEPT message, launching a DOCKER container:")
+            pretty.pprint(container_launch_info)
+
+            try:
+                r = self.conn.post(self.api_url, container_launch_info)
+                print("Result: {}".format(r.status_code))
+                if r.text:
+                    print(r.text)
+            except ValueError, err:
+                print("Request failed: {}".format(err))
 
 def main():
-    launcher = Launcher("http://172.17.0.31:5050")
+    launcher = Launcher("http://172.17.0.41:5050")
     launcher.connect()
     launcher.wait_for_offers()
     launcher.launch()

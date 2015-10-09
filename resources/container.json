@@ -12,7 +12,7 @@
         "launch": {
           "task_infos": [
             {
-              "name": "PingContainer",
+              "name": "Container",
               "agent_id": {
                 "value": null
               },
@@ -20,19 +20,11 @@
                 "value": null
               },
               "command": {
-                "uris": [
-                  {
-                    "value": "http://192.168.33.1:9000/content.tar.gz",
-                    "extract": true
-                  }
-                ],
-                "shell": true,
-                "value": "cd /var/local/sandbox && python -m SimpleHTTPServer 9090"
+                "value": ""
               },
               "container": {
                 "docker": {
-                  "image": "python:2.7",
-                  "network": "HOST",
+                  "image": "fnichol/uhttpd",
                   "privileged": false
                 },
                 "type": "DOCKER"
