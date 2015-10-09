@@ -2,7 +2,6 @@
 Run one app/framework on each mesos agent.
 
 ## Requirements
-- IPython notebook (for the notebook)
 - `pip install -r requirements.txt`
 - Vagrant (for vagrant)
 
