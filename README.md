@@ -1,9 +1,10 @@
 # Construct
-Run one app/framework on each mesos agent.
+Run one app/framework on each mesos agent. Useful in 'helper' use cases. E.g. installing a networking helper, a load balancer helper, or some application specific requirements.
 
 ## Requirements
 - `pip install -r requirements.txt`
-- Vagrant (for vagrant)
+- MiniMesos.org (preferred)
+- Vagrant (if you don't want to use mini-mesos).
 
 ## Running
-Run through the code. In this version will start a simplewebserver on each slave.
+Run `python launch.py`. It will install a simple webserver on every slave.
