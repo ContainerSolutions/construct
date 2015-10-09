@@ -23,7 +23,7 @@ class Launcher:
 
     def connect(self):
         r = requests.get("{}/state.json".format(self.master_url))
-        self.conn = ApiConnector()
+        self.conn = ApiConnector(self.master_url)
         self.background_thread = self.conn.register_framework()
 
     def wait_for_offers(self):
@@ -82,7 +82,7 @@ class Launcher:
 
 
 def main():
-    launcher = Launcher("http://192.168.33.10:5050")
+    launcher = Launcher("http://172.17.0.28:5050")
     launcher.connect()
     launcher.wait_for_offers()
     launcher.launch()

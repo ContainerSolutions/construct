@@ -1,13 +1,12 @@
 from __future__ import print_function
 
 import json
-import os
 import pprint
-import random
-import requests
-import sh
 import time
 from threading import Thread
+
+import requests
+
 
 # See KillTaskMessage in include/mesos/v1/scheduler/scheduler.proto
 SUBSCRIBE_BODY = {
@@ -59,10 +58,7 @@ TASK_RESOURCES_JSON = "../resources/task_resources.json"
 
 # Adjust the ports according to how you launched Mesos:
 # see --port in the commands in "Prerequisites"
-MASTER_URL = 'http://192.168.33.10:5050'
-SLAVE_URL = 'http://192.168.33.11:5051'
 API_V1 = '/api/v1/scheduler'
-API_URL = '{}/{}'.format(MASTER_URL, API_V1)
 CONTENT = 'application/json'
 
 headers = {
@@ -81,12 +77,15 @@ def get_json(filename):
     return json.loads("".join(lines))
 
 class ApiConnector:
-    def __init__(self):
+    def __init__(self, master_url):
         # TODO: THIS IS THREAD-UNSAFE
         self.terminate = False
         self.offers = []
         self.framework_id = None
         self.last_heartbeat = None
+        self.master_url = master_url
+        self.API_URL = '{}/{}'.format(master_url, API_V1)
+
 
     def get_offers(self):
         return self.offers
@@ -114,7 +113,6 @@ class ApiConnector:
         @return: the Response from the server.
         @rtype: requests.Response
         """
-        import time
         print('Connecting to Master: ' + url)
         r = requests.post(url, headers=headers, data=json.dumps(body), **kwargs)
     
@@ -159,7 +157,7 @@ class ApiConnector:
         """
         if index and id:
             raise ValueError("Cannot specify both ID and Index")
-        r = requests.get("{}/state.json".format(MASTER_URL))
+        r = requests.get("{}/state.json".format(self.MASTER_URL))
         master_state = r.json()
         frameworks = master_state.get("frameworks")
         if frameworks and isinstance(frameworks, list):
@@ -174,9 +172,9 @@ class ApiConnector:
     def register_framework(self):
         channel = None
         try:
-            channel = ApiConnectorThread(self)
+            channel = ApiConnectorThread(self.master_url, self)
             channel.start()
-            print("The background channel was started to {}".format(API_URL))
+            print("The background channel was started to {}".format(self.API_URL))
         except Exception, ex:
             print("An error occurred: {}".format(ex))
         return channel
@@ -191,12 +189,13 @@ class ApiConnector:
                 print("No frameworks to terminate")
         body = TEARDOWN_BODY
         body['framework_id']['value'] = fid
-        self.post(API_URL, body)
+        self.post(self.API_URL, body)
 
         
 class ApiConnectorThread(Thread):
-    def __init__(self, connector):
+    def __init__(self, master_url, connector):
         super(ApiConnectorThread, self).__init__()
+        self.API_URL = '{}/{}'.format(master_url, API_V1)
         self.connector = connector
         self.daemon = True
         self.timeout = 30
@@ -205,7 +204,7 @@ class ApiConnectorThread(Thread):
     def run(self):
         """Subscribe to mesos events and handle offers"""
         kwargs = {'stream':True, 'timeout':self.timeout}
-        ret = self.connector.post(API_URL, SUBSCRIBE_BODY, **kwargs)
+        ret = self.connector.post(self.API_URL, SUBSCRIBE_BODY, **kwargs)
         print("Subscribe post request returned: {}".format(ret))
 
         
@@ -219,30 +218,3 @@ class ApiConnectorThread(Thread):
         time.sleep(5)
         print("Channel was closed: {}".format(self.is_alive()))
 
-    
-def main():
-    r = requests.get("{}/state.json".format(MASTER_URL))
-    master_state = r.json()
-
-    r = requests.get("{}/state.json".format(SLAVE_URL))
-    slave_state = r.json()
-
-    # If this is not true, you're in for a world of hurt:
-    assert master_state["version"] == slave_state["version"]
-    print("Mesos version running at {}".format(master_state["version"]))
-
-    conn = ApiConnector()
-    
-    # And right now there ought to be no frameworks:
-    assert conn.get_framework(index=0) is None
-
-    background_thread = conn.register_framework()
-
-    background_thread.join()
-
-
-    
-if __name__ == '__main__':
-    main()
-
-    
