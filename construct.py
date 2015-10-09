@@ -218,3 +218,33 @@ class ApiConnectorThread(Thread):
         time.sleep(5)
         print("Channel was closed: {}".format(self.is_alive()))
 
+
+def main():
+    MASTER_URL = 'http://192.168.33.10:5050'
+    SLAVE_URL = 'http://192.168.33.11:5051'
+
+    r = requests.get("{}/state.json".format(MASTER_URL))
+    master_state = r.json()
+
+    r = requests.get("{}/state.json".format(SLAVE_URL))
+    slave_state = r.json()
+
+    # If this is not true, you're in for a world of hurt:
+    assert master_state["version"] == slave_state["version"]
+    print("Mesos version running at {}".format(master_state["version"]))
+
+    conn = ApiConnector()
+
+    # And right now there ought to be no frameworks:
+    assert conn.get_framework(index=0) is None
+
+    background_thread = conn.register_framework()
+
+    background_thread.join()
+
+
+
+if __name__ == '__main__':
+    main()
+
+
