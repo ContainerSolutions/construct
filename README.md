@@ -2,7 +2,7 @@
 Run one app/framework on each mesos agent. Useful in 'helper' use cases. E.g. installing a networking helper, a load balancer helper, or some application specific requirements.
 
 ## Requirements
-- Python 2
+- Python 2.7
 - `pip install -r requirements.txt`
 - MiniMesos.org (preferred)
 - Vagrant (if you don't want to use mini-mesos).
